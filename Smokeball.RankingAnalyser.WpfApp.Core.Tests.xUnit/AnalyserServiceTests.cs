@@ -141,8 +141,9 @@ a {{
 </style>
 {ParserServiceTests.GenerateHtml(50, "www.not-this-one.com")}
 <div><h3>Real entry</h3><div>{targetUrl}</div></div>
-{ParserServiceTests.GenerateHtml(50, "www.not-this-one.com")}</html>";
-        var cleanedHtml = "<html><div>Content</div></html>";
+{ParserServiceTests.GenerateHtml(50, "www.not-this-one.com")}
+<img href='www.example.com/?q=test'>href should be removed</img>
+<form>all forms should be cleaned<ul><li selected>1</li></ul></form></html>";
         var expectedRanking = 51;
         var analyserServiceWithRealParser = new AnalyserService(_mockSearchRequestService.Object, new ParserService());
 

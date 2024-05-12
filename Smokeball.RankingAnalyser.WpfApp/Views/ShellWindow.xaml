@@ -9,8 +9,12 @@
     xmlns:properties="clr-namespace:Smokeball.RankingAnalyser.WpfApp.Properties"
     Style="{StaticResource CustomMetroWindow}"
     mc:Ignorable="d"
-    MinWidth="500"
+    Width="750"
+    MinWidth="750"
+    MaxWidth="1250"
+    Height="350"
     MinHeight="350"
+    MaxHeight="500"
     Title="{x:Static properties:Resources.AppDisplayName}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">

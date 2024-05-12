@@ -46,7 +46,9 @@ public class AnalyserService(ISearchRequestService _searchRequestService, IParse
         htmlResponse = Regex.Replace(htmlResponse, "^<.*?doctype.*?html>", string.Empty, RegexOptions.Singleline | RegexOptions.IgnoreCase);
         htmlResponse = Regex.Replace(htmlResponse, "<script.*?script>", string.Empty, RegexOptions.Singleline | RegexOptions.IgnoreCase);
         htmlResponse = Regex.Replace(htmlResponse, "<style.*?style>", string.Empty, RegexOptions.Singleline | RegexOptions.IgnoreCase);
+        htmlResponse = Regex.Replace(htmlResponse, "<form.*?form>", string.Empty, RegexOptions.Singleline | RegexOptions.IgnoreCase);
         htmlResponse = Regex.Replace(htmlResponse, "&[a-zA-Z0-9#]{1,10};", string.Empty, RegexOptions.Singleline | RegexOptions.IgnoreCase);
+        htmlResponse = Regex.Replace(htmlResponse, "href=\"[^\"]*\"", string.Empty, RegexOptions.Singleline | RegexOptions.IgnoreCase);
         // Remove non self-closing tags
         htmlResponse = Regex.Replace(htmlResponse, "<(\\w+)(?:\\s+[^>]*)?>(?!.*<\\/\\1>)", string.Empty, RegexOptions.Singleline);
         return htmlResponse;
