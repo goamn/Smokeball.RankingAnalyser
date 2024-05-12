@@ -64,7 +64,7 @@ public class MainViewModel(ISeoService seoService) : ObservableObject
             return _isError switch
             {
                 true => _ranking?.ErrorMessage,
-                false when _ranking?.RankingFound == true => $"The URL is ranked at position: {_ranking?.Ranking}.",
+                false when _ranking?.RankingFound == true => $"The URL is ranked at position(s): {_ranking?.Rankings}.",
                 false when _ranking?.RankingFound == false => $"The URL is not in the top {Constants.SearchResultsCount} results.",
                 _ => "Click the Analyse button to check URL ranking.",
             };

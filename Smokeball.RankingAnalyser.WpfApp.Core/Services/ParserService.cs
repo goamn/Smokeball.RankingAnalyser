@@ -8,7 +8,7 @@ namespace Smokeball.RankingAnalyser.WpfApp.Core.Services
     {
         private static XmlNode _rootNode;
 
-        public int ParseHtmlAndGetRanking(string htmlResponse, string targetUrl)
+        public List<int> ParseHtmlAndGetRankings(string htmlResponse, string targetUrl)
         {
             XmlDocument document = new();
             try
@@ -21,8 +21,8 @@ namespace Smokeball.RankingAnalyser.WpfApp.Core.Services
                     throw new Exception($"The number of search result nodes is less than the expected amount of: {Constants.SearchResultsCount}");
                 }
 
-                var ranking = GetSeoRanking(_rootNode, targetUrl);
-                return ranking;
+                var rankings = GetSeoRankings(_rootNode, targetUrl);
+                return rankings;
             }
             catch (XmlException exception)
             {
@@ -51,12 +51,14 @@ namespace Smokeball.RankingAnalyser.WpfApp.Core.Services
             }
         }
 
-        private static int GetSeoRanking(XmlNode rootNode, string targetUrl)
+        private static List<int> GetSeoRankings(XmlNode rootNode, string targetUrl)
         {
-            var rank = 0;
+            List<int> notFound = [-1];
+            var rankings = new List<int>();
+            var currentRank = 0;
             if (rootNode == null)
             {
-                return rank;
+                return notFound;
             }
 
             foreach (XmlNode child in rootNode.ChildNodes)
@@ -72,20 +74,25 @@ namespace Smokeball.RankingAnalyser.WpfApp.Core.Services
                     }
 
                     // Only increase rank if there was an <h3> search result header and it's not a google maps result.
-                    rank++;
+                    currentRank++;
+                    if (currentRank > Constants.SearchResultsCount)
+                    {
+                        break;
+                    }
 
                     var targetUrlFound = FindChildNodeDeep(child, "div", targetUrl);
                     if (targetUrlFound != null)
                     {
-                        return rank;
-                    }
-                    if (rank > Constants.SearchResultsCount)
-                    {
-                        break;
+                        rankings.Add(currentRank);
                     }
                 }
             }
-            return -1;
+
+            if (rankings.Any())
+            {
+                return rankings;
+            }
+            return notFound;
         }
 
         private static XmlNode FindChildNodeDeep(XmlNode node, string nodeName, string searchText = null, string attributeName = null, string attributeValue = null)

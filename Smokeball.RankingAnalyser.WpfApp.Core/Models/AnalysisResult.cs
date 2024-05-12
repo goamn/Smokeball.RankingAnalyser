@@ -4,6 +4,6 @@
     {
         public string TechnicalErrorDetails { get; set; }
 
-        public int Result { get; set; }
+        public List<int> Results { get; set; }
     }
 }

@@ -16,10 +16,11 @@ Technical information: {0}";
         var analysisResult = await _analyserService.Analyse(keywords, targetUrl);
 
         var isTechnicalError = !string.IsNullOrEmpty(analysisResult.TechnicalErrorDetails);
+        var rankingFound = analysisResult.Results?.FirstOrDefault() != -1;
         return new SearchRankingResult
         {
-            RankingFound = analysisResult.Result > 0,
-            Ranking = analysisResult.Result,
+            RankingFound = rankingFound,
+            Rankings = rankingFound ? string.Join(", ", analysisResult.Results) : null,
             ErrorMessage = isTechnicalError ? string.Format(errorMessageTemplate, analysisResult.TechnicalErrorDetails) : null
         };
     }

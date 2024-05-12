@@ -2,5 +2,5 @@
 
 public interface IParserService
 {
-    int ParseHtmlAndGetRanking(string htmlResponse, string targetUrl);
+    List<int> ParseHtmlAndGetRankings(string htmlResponse, string targetUrl);
 }

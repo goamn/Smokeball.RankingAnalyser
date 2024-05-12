@@ -64,17 +64,17 @@ public class MainPageTests
     {
         var mockSeoService = new Mock<ISeoService>();
         mockSeoService.Setup(s => s.Analyse(It.IsAny<string>(), It.IsAny<string>()))
-            .ReturnsAsync(new SearchRankingResult { Ranking = 1, RankingFound = true });
+            .ReturnsAsync(new SearchRankingResult { Rankings = "1", RankingFound = true });
 
         var vm = new MainViewModel(mockSeoService.Object);
         Assert.Null(vm.Ranking?.ErrorMessage);
-        Assert.Null(vm.Ranking?.Ranking);
+        Assert.Null(vm.Ranking?.Rankings);
 
         vm.AnalyseCommand.Execute(null);
 
         Assert.NotNull(vm.Ranking);
         Assert.True(vm.Ranking.RankingFound);
-        Assert.Equal(1, vm.Ranking.Ranking);
+        Assert.Equal("1", vm.Ranking.Rankings);
         Assert.Null(vm.Ranking.ErrorMessage);
     }
 
@@ -102,11 +102,11 @@ public class MainPageTests
     {
         var mockSeoService = new Mock<ISeoService>();
         var vm = new MainViewModel(mockSeoService.Object);
-        var ranking = 3;
-        vm.Ranking = new SearchRankingResult { RankingFound = true, Ranking = ranking };
+        var ranking = "3, 55";
+        vm.Ranking = new SearchRankingResult { RankingFound = true, Rankings = ranking };
 
         Assert.Equal("Ranking found!", vm.ResultTitle);
-        Assert.Equal($"The URL is ranked at position: {ranking}.", vm.ResultBody);
+        Assert.Equal($"The URL is ranked at position(s): {ranking}.", vm.ResultBody);
     }
 
     [Fact]
@@ -114,8 +114,8 @@ public class MainPageTests
     {
         var mockSeoService = new Mock<ISeoService>();
         var vm = new MainViewModel(mockSeoService.Object);
-        var ranking = 0;
-        vm.Ranking = new SearchRankingResult { RankingFound = false, Ranking = ranking };
+        var ranking = "0";
+        vm.Ranking = new SearchRankingResult { RankingFound = false, Rankings = ranking };
 
         Assert.Equal("Ranking not found", vm.ResultTitle);
         Assert.Equal($"The URL is not in the top {Constants.SearchResultsCount} results.", vm.ResultBody);

@@ -30,13 +30,13 @@ public class AnalyserServiceTests
 
         _mockSearchRequestService.Setup(s => s.SendSearchRequest(keywords))
             .ReturnsAsync(html);
-        _mockParserService.Setup(p => p.ParseHtmlAndGetRanking(html, targetUrl))
-            .Returns(expectedRanking);
+        _mockParserService.Setup(p => p.ParseHtmlAndGetRankings(html, targetUrl))
+            .Returns([expectedRanking]);
 
         var result = await _analyserService.Analyse(keywords, targetUrl);
 
         Assert.NotNull(result);
-        Assert.Equal(expectedRanking, result.Result);
+        Assert.Equal([expectedRanking], result.Results);
         Assert.Equal(default, result.TechnicalErrorDetails);
     }
 
@@ -52,7 +52,7 @@ public class AnalyserServiceTests
 
         var result = await _analyserService.Analyse(keywords, targetUrl);
 
-        Assert.Equal(default, result.Result);
+        Assert.Equal(default, result.Results);
         Assert.Equal(expectedErrorMessage, result.TechnicalErrorDetails);
     }
 
@@ -67,12 +67,12 @@ public class AnalyserServiceTests
         _mockSearchRequestService.Setup(s => s.SendSearchRequest(keywords))
             .ReturnsAsync(expectedHtml);
 
-        _mockParserService.Setup(p => p.ParseHtmlAndGetRanking(It.IsAny<string>(), targetUrl))
+        _mockParserService.Setup(p => p.ParseHtmlAndGetRankings(It.IsAny<string>(), targetUrl))
             .Throws(new XmlException(expectedRrrorMessage));
 
         var result = await _analyserService.Analyse(keywords, targetUrl);
 
-        Assert.Equal(default, result.Result);
+        Assert.Equal(default, result.Results);
         Assert.Equal(expectedRrrorMessage, result.TechnicalErrorDetails);
     }
 
@@ -110,13 +110,13 @@ a {{
         _mockSearchRequestService.Setup(s => s.SendSearchRequest(keywords))
             .ReturnsAsync(reallyDirtyHtml);
 
-        _mockParserService.Setup(p => p.ParseHtmlAndGetRanking(expectedCleanedHtml, targetUrl))
-            .Returns(expectedRanking);
+        _mockParserService.Setup(p => p.ParseHtmlAndGetRankings(expectedCleanedHtml, targetUrl))
+            .Returns([expectedRanking]);
 
         var result = await _analyserService.Analyse(keywords, targetUrl);
 
-        _mockParserService.Verify(p => p.ParseHtmlAndGetRanking(It.Is<string>(s => s == expectedCleanedHtml), targetUrl), Times.Once());
-        Assert.Equal(expectedRanking, result.Result);
+        _mockParserService.Verify(p => p.ParseHtmlAndGetRankings(It.Is<string>(s => s == expectedCleanedHtml), targetUrl), Times.Once());
+        Assert.Equal([expectedRanking], result.Results);
     }
 
     [Fact]
@@ -152,6 +152,6 @@ a {{
 
         var result = await analyserServiceWithRealParser.Analyse(keywords, targetUrl);
 
-        Assert.Equal(expectedRanking, result.Result);
+        Assert.Equal([expectedRanking], result.Results);
     }
 }

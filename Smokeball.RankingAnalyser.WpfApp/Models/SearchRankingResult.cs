@@ -4,7 +4,7 @@ public class SearchRankingResult
 {
     public bool RankingFound { get; set; } = false;
 
-    public int? Ranking { get; set; }
+    public string Rankings { get; set; }
 
     public string ErrorMessage { get; set; }
 }

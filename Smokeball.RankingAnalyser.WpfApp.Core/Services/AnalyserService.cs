@@ -25,10 +25,10 @@ public class AnalyserService(ISearchRequestService _searchRequestService, IParse
 
         try
         {
-            var ranking = _parserService.ParseHtmlAndGetRanking(htmlResponse, targetUrl);
+            var rankings = _parserService.ParseHtmlAndGetRankings(htmlResponse, targetUrl);
             return new AnalysisResult
             {
-                Result = ranking
+                Results = rankings
             };
         }
         catch (Exception exception)
